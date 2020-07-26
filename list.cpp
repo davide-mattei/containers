@@ -48,13 +48,14 @@ public:
       return iterator(head_);
   }
 
-  iterator insert(iterator const& it, T const& value) {
+  iterator insert(iterator it, T const& value) {
       Node* N = new Node;
       N -> data_ = value;
-      N -> next_ = it -> current_node_;
-      it -> current_node_ -> prev_ -> next_ = N;
-      it -> current_node_ -> prev_ = N;
-      return other;
+      N -> next_ = it();
+      N -> prev_ = it() -> prev_;
+      it() -> prev_ -> next_ = N;
+      it() -> prev_ = N;
+      return it;
   }
 
   int position (iterator const& other) {
@@ -70,7 +71,7 @@ public:
 template<class T> 
 class list<T>::Node {
     public:
-    T data_;
+    T data_{};
     Node *prev_;
     Node *next_;
   };
@@ -105,7 +106,11 @@ class list<T>::iterator {
         return this->current_node_ == other.current_node_;
     }
     bool operator!=(iterator const& other) {
-        return !(this == &other);
+        return !(*this == other);
+    }
+
+    Node* operator()() {
+        return this->current_node_;
     }
 
 
@@ -114,10 +119,17 @@ class list<T>::iterator {
 
 
 int main() {
-  list<int> lista();
+  list<int> lista;
   lista.push_back(3);
+  lista.push_front(4);
+  lista.push_back(4);
+  lista.push_front(2);
 
   auto it = lista.begin();
-  lista.insert(it, 3);
+
+  lista.insert(it,5);
+
+  for(auto end = lista.end(); it != end; ++it)
+   std::cout << *it << '\n';
   
 }
