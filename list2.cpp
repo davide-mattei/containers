@@ -7,8 +7,8 @@ template <class T> class list {
 
 private:
     
-  Node *head_; //
-  Node *tail_; //
+  Node* head_; //
+  Node* tail_; //
 
 public:
   list() {
@@ -21,11 +21,20 @@ public:
 
   }
 
-  ~list() = default;
+  ~list()
+  {
+    while (head_->prev_ == tail_) {
+      Node* it = head_->prev_->prev_;
+      delete head_->prev_;
+      head_->prev_ = it;
+    }
+    delete head_;
+    delete tail_;
+  }
 
-  void push_back(T const &value) {
-
-    Node *N = new Node;
+  void push_back(T const &value) 
+  {
+    Node* N = new Node;
     N->data_ = value;
     N->next_ = head_;
     N->prev_ = head_->prev_;
@@ -33,8 +42,9 @@ public:
     head_->prev_ = N;
   }
 
-  void push_front(T const &value) {
-    Node *N = new Node;
+  void push_front(T const &value)
+  {
+    Node* N = new Node;
     N->data_ = value;
     N->next_ = tail_->next_;
     N->prev_ = tail_;
@@ -71,12 +81,11 @@ public:
 };
 
 template<class T> 
-class list<T>::Node {
-    public:
+struct list<T>::Node {
     T data_;
     Node *prev_;
     Node *next_;
-  };
+};
 
   template<class T> 
 class list<T>::iterator {
