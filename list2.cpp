@@ -60,13 +60,13 @@ public:
       return iterator(head_);
   }
 
-  iterator insert(iterator it, T const& value) {
+  iterator insert(iterator& it, T const& value) {
       Node* N = new Node;
       N -> data_ = value;
       N -> next_ = it();
       N -> prev_ = it() ->prev_;
-      /*it.current_node_*/ it() -> prev_ -> next_ = N;
-      /*it.current_node_*/ it() -> prev_ = N;
+      it() -> prev_ -> next_ = N;
+      it() -> prev_ = N;
       return it;
   }
 
@@ -116,13 +116,12 @@ class list<T>::iterator {
     bool operator==(iterator const& other) {
         return this->current_node_ == other.current_node_;
     }
+    
     bool operator!=(iterator const& other) {
         return !(*this == other);
     }
 
     Node* operator() () { return this->current_node_; }
-
-
 
   };
 
@@ -135,11 +134,10 @@ int main() {
 
   auto it = lista.begin();
   lista.insert(it, 5);
-  //std::cout << *it << '\n';
+  std::cout << *it << '\n';
   it = lista.begin();
   for (auto end = lista.end(); it != end; ++it)
     std::cout << *it << ' ';
 
   std::cout << '\n';
-  
 }
