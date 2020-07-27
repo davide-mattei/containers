@@ -29,6 +29,7 @@ public:
     vector& operator=(vector const& other) override {
         if (this != &other)
         {
+            delete [] data_;
             sz_ = other.sz_;
             data_ = new T[sz_];
             std::copy(other.data_, other.data_ + sz_, data_);
